@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import Navbar from "../components/Navbar";
 
 const Container = styled.div`
   width: 100vw;
@@ -48,18 +49,21 @@ const Link = styled.a`
 
 const Login = () => {
   return (
-    <Container>
-      <Wrapper>
-        <Title>LOGIN</Title>
-        <Form>
-          <Input placeholder="username" />
-          <Input placeholder="password" />
-          <Button>ENTER</Button>
-          <Link>FORGOT PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
-        </Form>
-      </Wrapper>
-    </Container>
+    <>
+      <Navbar />
+      <Container>
+        <Wrapper>
+          <Title>LOGIN</Title>
+          <Form>
+            <Input placeholder="username" />
+            <Input placeholder="password" />
+            <Button>ENTER</Button>
+            <Link>FORGOT PASSWORD?</Link>
+            <Link>CREATE A NEW ACCOUNT</Link>
+          </Form>
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 

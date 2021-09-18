@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import Badge from "@material-ui/core/Badge";
+import { Badge } from "@material-ui/core";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 
@@ -81,7 +81,9 @@ const Navbar = () => {
 
         <Center>
           <Logo>
-            <Link style={{textDecoration:"none"}} to="/">Rakify</Link>
+            <Link style={{ textDecoration: "none" }} to="/">
+              Rakify
+            </Link>
           </Logo>
         </Center>
 

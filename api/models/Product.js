@@ -11,14 +11,19 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: 500,
-      required:true,
+      required: true,
     },
     img: {
       type: String,
       required: true,
     },
-    categories: {
+    cat: {
       type: Array,
+      required: true,
+    },
+    tags: {
+      type: Array,
+      default: [],
     },
     size: {
       type: Array,

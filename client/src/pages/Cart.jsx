@@ -3,7 +3,8 @@ import Navbar from "./../components/Navbar";
 import Announcement from "./../components/Announcement";
 import Footer from "./../components/Footer";
 import { Add, Remove } from "@material-ui/icons";
-import { mobile } from './../responsive';
+import { mobile } from "./../responsive";
+import { useSelector } from "react-redux";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -34,7 +35,7 @@ const TopTexts = styled.div`
 const TopText = styled.span`
   text-decoration: underline;
   cursor: pointer;
-  margin: 0 10px;  
+  margin: 0 10px;
 `;
 
 const Bottom = styled.div`
@@ -139,6 +140,8 @@ const SummaryButton = styled.button`
 `;
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <Container>
       <Navbar />
@@ -158,66 +161,38 @@ const Cart = () => {
 
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.postimg.cc/L6Xr3W17/desert-6215514-640.jpg" />
-                <Details>
-                  <ProductName>
-                    <b>Product: </b>
-                    Red Dress
-                  </ProductName>
-                  <ProductId>
-                    <b>ID: </b>
-                    121233
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size: </b>
-                    37
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
+            {cart.products.map(product => (
+              <Product>
+                <ProductDetail>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product: </b>
+                      {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID: </b>
+                      {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size: </b>
+                      {product.size.toUpperCase()}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
 
-              <PriceDetail>
-                <ProductAmmountContainer>
-                  <Add />
-                  <ProductAmmount>2</ProductAmmount>
-                  <Remove />
-                </ProductAmmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetail>
-            </Product>
-
+                <PriceDetail>
+                  <ProductAmmountContainer>
+                    <Add />
+                    <ProductAmmount>{product.quantity}</ProductAmmount>
+                    <Remove />
+                  </ProductAmmountContainer>
+                  <ProductPrice>$ {product.price*product.quantity}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
-
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.postimg.cc/L6Xr3W17/desert-6215514-640.jpg" />
-                <Details>
-                  <ProductName>
-                    <b>Product: </b>
-                    Blue Dress
-                  </ProductName>
-                  <ProductId>
-                    <b>ID: </b>
-                    121233
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size: </b>M
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-
-              <PriceDetail>
-                <ProductAmmountContainer>
-                  <Add />
-                  <ProductAmmount>3</ProductAmmount>
-                  <Remove />
-                </ProductAmmountContainer>
-                <ProductPrice>$ 50</ProductPrice>
-              </PriceDetail>
-            </Product>
           </Info>
 
           <Summary>
@@ -225,7 +200,7 @@ const Cart = () => {
 
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
 
             <SummaryItem>
@@ -240,7 +215,7 @@ const Cart = () => {
 
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryButton>CHECKOUT NOW</SummaryButton>
           </Summary>

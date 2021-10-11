@@ -1,12 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
+import "./product.css";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { Link, useLocation } from "react-router-dom";
 import app from "../../firebase";
-import "./product.css";
 import Chart from "../../components/chart/Chart";
 import { Publish } from "@material-ui/icons";
 import { useSelector } from "react-redux";
@@ -16,24 +16,33 @@ import { useDispatch } from "react-redux";
 import { updateProduct } from "../../redux/apiCalls";
 
 export default function Product() {
+  const dispatch = useDispatch();
   const location = useLocation();
   const productId = location.pathname.split("/")[2];
-  const [pStats, setPStats] = useState([]);
   const product = useSelector((state) =>
     state.product.products.find((product) => product._id === productId)
   );
 
-  const [inputs, setInputs] = useState({});
+  const [pStats, setPStats] = useState([]);
+  const [inputs, setInputs] = useState({
+    title: product.title,
+    desc: product.desc,
+    inStock: product.inStock,
+    price: product.price,
+  });
   const [file, setFile] = useState(null);
-  const [cat, setCat] = useState([product.cat]);
-  const dispatch = useDispatch();
-
+  const [cat, setCat] = useState(product.cat);
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleCat = (e) => {
-    setCat(e.target.value.split(","));
+    setCat(
+      e.target.value
+        .toLowerCase()
+        .replace(/[^a-zA-Z,]/g, "")
+        .split(",")
+    );
   };
 
   const handleClickWithFile = (e) => {
@@ -71,12 +80,23 @@ export default function Product() {
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        const tags = inputs.title
+          .toLowerCase()
+          .replace(/[^a-zA-Z ]/g, "")
+          .split(" ");
+        const slug = inputs.title
+          .toLowerCase()
+          .split(" ")
+          .join("-")
+          .toLowerCase();
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const updatedProduct = {
             ...product,
             ...inputs,
             img: downloadURL,
             cat: cat,
+            tags: tags,
+            slug: slug,
           };
           updateProduct(productId, updatedProduct, dispatch);
         });
@@ -86,7 +106,18 @@ export default function Product() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    const updatedProduct = { ...product, ...inputs, cat: cat };
+    const tags = inputs.title
+      .toLowerCase()
+      .replace(/[^a-zA-Z ]/g, "")
+      .split(" ");
+    const slug = inputs.title.toLowerCase().split(" ").join("-");
+    const updatedProduct = {
+      ...product,
+      ...inputs,
+      cat: cat,
+      tags: tags,
+      slug: slug,
+    };
     updateProduct(productId, updatedProduct, dispatch);
   };
 
@@ -178,25 +209,28 @@ export default function Product() {
             <input
               type="text"
               name="title"
-              value={inputs.title?inputs.title:product.title}
+              value={inputs.title ? inputs.title : ""}
               onChange={handleChange}
+              required
             />
             <label>Product Description</label>
             <input
               type="text"
               name="desc"
-              value={inputs.desc?inputs.desc:product.desc}
+              value={inputs.desc ? inputs.desc : ""}
               onChange={handleChange}
+              required
             />
             <label>Price</label>
             <input
               type="number"
               name="price"
-              value={inputs.price?inputs.price:product.price}
+              value={inputs.price ? inputs.price : ""}
               onChange={handleChange}
+              required
             />
             <label>In Stock</label>
-            <select name="inStock" onChange={handleChange}>
+            <select name="inStock" onChange={handleChange} required>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
@@ -204,18 +238,21 @@ export default function Product() {
             <label>Categories</label>
             <input
               type="text"
-              value={cat?cat.join():product.cat.join()}
+              name="cat"
+              value={cat ? cat.join() : ""}
               onChange={handleCat}
+              required
             />
+            {/* tags, setTags */}
+            <label>Tags:</label>
+            {product?.tags}
           </div>
 
           {/* file, setFile */}
           <div className="productFormRight">
             <div className="productUpload">
               <img
-                src={
-                  file ? URL.createObjectURL(file) : product.img
-                }
+                src={file ? URL.createObjectURL(file) : product.img}
                 alt=""
                 className="productUploadImg"
               />
@@ -227,6 +264,7 @@ export default function Product() {
                 id="file"
                 style={{ display: "none" }}
                 onChange={(e) => setFile(e.target.files[0])}
+                required
               />
             </div>
             <button

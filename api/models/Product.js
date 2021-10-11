@@ -6,24 +6,32 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
     desc: {
       type: String,
       trim: true,
       maxlength: 500,
-      required: true,
+      default: [],
     },
     img: {
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     cat: {
       type: Array,
       required: true,
+      trim: true,
     },
     tags: {
       type: Array,
-      default: [],
+      required: true,
+      trim: true,
     },
     size: {
       type: Array,

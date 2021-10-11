@@ -11,10 +11,10 @@ import { addProduct } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
 
 export default function NewProduct() {
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState([]);
-  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -22,7 +22,7 @@ export default function NewProduct() {
     });
   };
   const handleCat = (e) => {
-    setCat(e.target.value.split(","));
+    setCat(e.target.value.toLowerCase().split(","));
   };
 
   const handleClick = (e) => {
@@ -60,8 +60,16 @@ export default function NewProduct() {
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        const tags = inputs.title.toLowerCase().replace(/[^a-zA-Z ]/g, "").split(" ");
+        const slug = inputs.title.toLowerCase().split(" ").join("-");
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
+          const product = {
+            ...inputs,
+            img: downloadURL,
+            cat: cat,
+            tags: tags,
+            slug: slug,
+          };
           addProduct(product, dispatch);
         });
       }

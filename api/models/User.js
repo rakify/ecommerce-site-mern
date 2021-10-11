@@ -10,6 +10,13 @@ const UserSchema = new mongoose.Schema(
       maxlength: 20,
       required: true,
     },
+    name: {
+      type: String,
+      trim: true,
+      minlength: 3,
+      maxlength: 50,
+      default: ""
+    },
     email: {
       type: String,
       trim: true,
@@ -31,33 +38,18 @@ const UserSchema = new mongoose.Schema(
       default:
         "https://img.icons8.com/pastel-glyph/64/000000/person-male--v3.png",
     },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    followings: {
-      type: Array,
-      default: [],
-    },
-    desc: {
+    address: {
       type: String,
-      maxlength: 50,
-    },
-    city: {
-      type: String,
-      maxlength: 50,
-    },
-    hometown: {
-      type: String,
-      maxlength: 50,
+      maxlength: 100,
+      default: ""
     },
     relationship: {
       type: String,
       default: "",
     },
-    gender: {
+    pn: {
       type: String,
-      maxlength: 50,
+      default: "",
     },
   },
   { timestamps: true }

@@ -27,6 +27,7 @@ export default function NewProduct() {
 
   const handleClick = (e) => {
     e.preventDefault();
+    console.log(1)
     const fileName = new Date().getTime() + file.name;
     const storage = getStorage(app);
     const storageRef = ref(storage, fileName);
@@ -130,7 +131,7 @@ export default function NewProduct() {
             <option value="false">No</option>
           </select>
         </div>
-        <button onClick={inputs.title && inputs.file && inputs.price && inputs.cat && handleClick} className="addProductButton">
+        <button onClick={inputs.title && file && inputs.price && handleClick} className="addProductButton">
           Create
         </button>
       </form>

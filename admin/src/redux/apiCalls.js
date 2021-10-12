@@ -90,7 +90,7 @@ export const updateUser = async (id, user, dispatch) => {
 export const addUser = async (user, dispatch) => {
   dispatch(addUserStart());
   try {
-    const res = await userRequest.post(`/auth/register`, user);
+    const res = await publicRequest.post(`/auth/register`, user);
     dispatch(addUserSuccess(res.data));
   } catch (err) {
     dispatch(addUserFailure());

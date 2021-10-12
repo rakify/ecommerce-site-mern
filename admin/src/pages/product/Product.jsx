@@ -139,6 +139,7 @@ export default function Product() {
     []
   );
 
+  let wait = true;
   useEffect(() => {
     const getStats = async () => {
       try {
@@ -156,8 +157,8 @@ export default function Product() {
         console.log(err);
       }
     };
-    getStats();
-  }, [productId, MONTHS]);
+    !wait && getStats();
+  }, [MONTHS, productId, wait]);
 
   return (
     <div className="product">

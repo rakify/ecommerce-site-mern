@@ -13,9 +13,12 @@ import {
   WorkOutline,
   Report,
 } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
+  const location = useLocation();
+  const menu = location.pathname.split("/")[1];
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -23,7 +26,7 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
+            <li className={(menu==="" && "sidebarListItem active") || "sidebarListItem"}>
               <LineStyle className="sidebarIcon" />
               Home
             </li>
@@ -42,13 +45,13 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
             <Link to="/users" className="link">
-              <li className="sidebarListItem">
+              <li className={(menu==="users" && "sidebarListItem active") || "sidebarListItem"}>
                 <PermIdentity className="sidebarIcon" />
                 Users
               </li>
             </Link>
             <Link to="/products" className="link">
-              <li className="sidebarListItem">
+              <li className={(menu==="products" && "sidebarListItem active") || "sidebarListItem"}>
                 <Storefront className="sidebarIcon" />
                 Products
               </li>

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import "./newProduct.css";
+import { useState } from "react";
 import {
   getStorage,
   ref,
@@ -60,7 +60,10 @@ export default function NewProduct() {
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        const tags = inputs.title.toLowerCase().replace(/[^a-zA-Z ]/g, "").split(" ");
+        const tags = inputs.title
+          .toLowerCase()
+          .replace(/[^a-zA-Z ]/g, "")
+          .split(" ");
         const slug = inputs.title.toLowerCase().split(" ").join("-");
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           const product = {
@@ -86,6 +89,7 @@ export default function NewProduct() {
             type="file"
             id="file"
             onChange={(e) => setFile(e.target.files[0])}
+            required
           />
         </div>
         <div className="addProductItem">
@@ -121,12 +125,12 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Stock</label>
-          <select name="inStock" onChange={handleChange}>
+          <select name="inStock" onChange={handleChange} required>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
         </div>
-        <button onClick={handleClick} className="addProductButton">
+        <button onClick={inputs.title && inputs.file && inputs.price && inputs.cat && handleClick} className="addProductButton">
           Create
         </button>
       </form>

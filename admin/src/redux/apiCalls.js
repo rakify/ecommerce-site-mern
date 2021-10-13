@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   loginFailure,
   loginStart,
@@ -30,21 +29,8 @@ import {
   addProductSuccess,
   addProductFailure,
 } from "./productRedux";
-// import { publicRequest, userRequest } from "../requestMethods";
+import { publicRequest, userRequest } from "../requestMethods";
 
-const BASE_URL = "http://localhost:4000/api/";
-// const TOKEN = JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user)
-//   .currentUser.accessToken;
-
-const publicRequest = axios.create({
-  baseURL: BASE_URL,
-});
-
-const userRequest = axios.create({
-  baseURL: BASE_URL,
-  headers: { token: `Bearer ${JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user)
-  .currentUser.accessToken}` },
-});
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());

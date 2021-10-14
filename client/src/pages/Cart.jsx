@@ -4,7 +4,9 @@ import Announcement from "./../components/Announcement";
 import Footer from "./../components/Footer";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "./../responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCart, addCart } from "../redux/apiCalls";
+import { Link } from "react-router-dom";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -72,12 +74,12 @@ const ProductName = styled.span``;
 
 const ProductId = styled.span``;
 
-const ProductColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: ${(props) => props.color};
-`;
+// const ProductColor = styled.div`
+//   width: 20px;
+//   height: 20px;
+//   border-radius: 50%;
+//   background: ${(props) => props.color};
+// `;
 
 const ProductSize = styled.span``;
 
@@ -140,7 +142,35 @@ const SummaryButton = styled.button`
 `;
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.user.currentUser?._id);
   const cart = useSelector((state) => state.cart);
+
+  const emptyCart = () => {
+    id && deleteCart(id, dispatch);
+  };
+
+  const handleQuantity = (type, productId, title, img, price) => {
+    if (type === "dec") {
+      const productInfo = {
+        productId: productId,
+        title: title,
+        img: img,
+        quantity: -1,
+        price: price,
+      };
+      addCart(id, productInfo, dispatch);
+    } else if (type === "inc") {
+      const productInfo = {
+        productId: productId,
+        title: title,
+        img: img,
+        quantity: 1,
+        price: price,
+      };
+      addCart(id, productInfo, dispatch);
+    }
+  };
 
   return (
     <Container>
@@ -149,11 +179,14 @@ const Cart = () => {
       <Wrapper>
         <Title>Your Cart</Title>
         <Top>
-          <TopButton>Continue Shopping</TopButton>
+          <Link to="/">
+            <TopButton>Continue Shopping</TopButton>
+          </Link>
 
           <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
+            <TopText>Shopping Bag({cart.products.length})</TopText>
             <TopText>Your Wishlist(0)</TopText>
+            <TopText onClick={emptyCart}>Clear Cart</TopText>
           </TopTexts>
 
           <TopButton type="filled">Checkout Now</TopButton>
@@ -161,8 +194,8 @@ const Cart = () => {
 
         <Bottom>
           <Info>
-            {cart.products.map(product => (
-              <Product>
+            {cart.products.map((product) => (
+              <Product key={product._id}>
                 <ProductDetail>
                   <Image src={product.img} />
                   <Details>
@@ -174,21 +207,47 @@ const Cart = () => {
                       <b>ID: </b>
                       {product._id}
                     </ProductId>
-                    <ProductColor color={product.color} />
+                    <ProductId>
+                      <b>Price: </b>$ {product.price}
+                    </ProductId>
+                    {/* <ProductColor color={product.color} /> */}
                     <ProductSize>
                       <b>Size: </b>
-                      {product.size.toUpperCase()}
+                      {product.size?.toUpperCase()}
                     </ProductSize>
                   </Details>
                 </ProductDetail>
 
                 <PriceDetail>
                   <ProductAmmountContainer>
-                    <Add />
+                    <Remove
+                      onClick={() =>
+                        handleQuantity(
+                          "dec",
+                          product.productId,
+                          product.title,
+                          product.img,
+                          product.price
+                        )
+                      }
+                    />
                     <ProductAmmount>{product.quantity}</ProductAmmount>
-                    <Remove />
+                    <Add
+                      onClick={() =>
+                        handleQuantity(
+                          "inc",
+                          product.productId,
+                          product.title,
+                          product.img,
+                          product.quantity,
+                          product.price
+                        )
+                      }
+                    />
                   </ProductAmmountContainer>
-                  <ProductPrice>$ {product.price*product.quantity}</ProductPrice>
+                  <ProductPrice>
+                    $ {product.price * product.quantity}
+                  </ProductPrice>
                 </PriceDetail>
               </Product>
             ))}

@@ -12,10 +12,10 @@ import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 
 function App() {
-  const TOKEN = JSON.parse(
+  const TOKEN = localStorage.length>=1?JSON.parse(
     JSON.parse(localStorage?.getItem("persist:root"))?.user
-  )?.currentUser?.isAdmin;
-
+  )?.currentUser?.isAdmin:0;
+  
   return (
     <Router>
       <Route exact path="/login">

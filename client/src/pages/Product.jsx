@@ -6,10 +6,10 @@ import Navbar from "./../components/Navbar";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "./../responsive";
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { publicRequest } from "../requestMethods";
-import { addProduct } from "../redux/cartRedux";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart } from "./../redux/apiCalls";
+import { useHistory } from "react-router";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -108,23 +108,26 @@ const Button = styled.button`
 
 const Product = () => {
   const location = useLocation();
-  const id = location.pathname.split("/")[2];
-
-  const [product, setProduct] = useState({});
+  const productId = location.pathname.split("/")[2];
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  useEffect(() => {
-    const getProduct = async () => {
-      try {
-        const res = await publicRequest.get(`/products/find/${id}`);
-        setProduct(res.data);
-      } catch (err) {}
-    };
-    getProduct();
-  }, [id]);
+  const product = useSelector((state) =>
+    state.product.products.find((product) => product._id === productId)
+  );
+
+  const id = useSelector((state) => state.user.currentUser?._id);
+  
+  const productInfo = {
+    productId: product._id,
+    title: product.title,
+    img: product.img,
+    quantity: quantity,
+    price: product.price,
+  };
 
   const handleQuantity = (type) => {
     if (type === "dec") quantity > 1 && setQuantity(quantity - 1);
@@ -132,8 +135,8 @@ const Product = () => {
   };
 
   const handleClick = () => {
-    //update cart
-    dispatch(addProduct({ ...product, quantity, color, size }));
+    !id && history.push("/login");
+    id && addCart(id, productInfo, dispatch);
   };
 
   return (
@@ -172,7 +175,7 @@ const Product = () => {
               <Ammount>{quantity}</Ammount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmmountContainer>
-            <Button onClick={handleClick}>ADD TO CART</Button>
+            <Button onClick={handleClick}>Add to Cart</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

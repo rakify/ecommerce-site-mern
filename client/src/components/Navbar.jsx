@@ -66,6 +66,9 @@ const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
   margin-left: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
@@ -78,6 +81,7 @@ const Image = styled.img`
 const Logout = styled.span`
   margin-left: 10px;
   color: red;
+  cursor: pointer;
 `;
 
 const Navbar = () => {
@@ -105,9 +109,8 @@ const Navbar = () => {
 
         <Right>
           {user && (
-            <>
-              <Image src={user.img} />
-              {user.username}{" "}
+            <MenuItem>
+              {user.username} <Image src={user.img} />
               <Logout
                 onClick={() => {
                   window.localStorage.clear();
@@ -116,7 +119,7 @@ const Navbar = () => {
               >
                 (Logout)
               </Logout>
-            </>
+            </MenuItem>
           )}
           {!user && (
             <>

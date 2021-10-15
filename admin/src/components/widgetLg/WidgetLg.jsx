@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { userRequest } from "../../requestMethods";
+import { axios } from "../../requestMethods";
 import "./widgetLg.css";
 import { format } from "timeago.js";
 
@@ -9,7 +9,7 @@ export default function WidgetLg() {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const res = await userRequest.get("orders");
+        const res = await axios.get("orders");
         setOrders(res.data);
       } catch (err) {
         console.log(err);

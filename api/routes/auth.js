@@ -44,10 +44,21 @@ router.post("/login", async (req, res) => {
 
     const { password, ...others } = user._doc;
 
-    res.status(200).json({ ...others, accessToken });
+    res
+      .status(200)
+      .cookie("jwt", accessToken, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 1 * 3600000),
+      })
+      .json({ ...others, accessToken });
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+//LOGOUT
+router.get("/logout", (req, res) => {
+  res.status(200).clearCookie("jwt").json({ logout: true });
 });
 
 module.exports = router;

@@ -11,7 +11,7 @@ import Chart from "../../components/chart/Chart";
 import { Publish } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
-import { userRequest } from "../../requestMethods";
+import { axios } from "../../requestMethods";
 import { useDispatch } from "react-redux";
 import { updateProduct } from "../../redux/apiCalls";
 
@@ -143,7 +143,7 @@ export default function Product() {
   useEffect(() => {
     const getStats = async () => {
       try {
-        const res = await userRequest.get("orders/income?pid=" + productId);
+        const res = await axios.get("orders/income?pid=" + productId);
         const list = res.data.sort((a, b) => {
           return a._id - b._id;
         });

@@ -1,11 +1,16 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.token;
-  console.log(authHeader)
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.jwt_secret, (err, user) => {
+  //parsing cookies from header {credit: https://alligator.io/nodejs/express-cookies/}
+  const rawCookies = req.headers.cookie.split("; ");
+  const parsedCookies = {};
+  rawCookies.forEach((rawCookie) => {
+    const parsedCookie = rawCookie.split("=");
+    parsedCookies[parsedCookie[0]] = parsedCookie[1];
+  });
+
+  if (parsedCookies.jwt) {
+    jwt.verify(parsedCookies.jwt, process.env.jwt_secret, (err, user) => {
       if (err) {
         return res.status(401).json("Invalid token!");
       }

@@ -4,7 +4,7 @@ import "./home.css";
 import WidgetSm from "../../components/widgetSm/WidgetSm";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
 import { useMemo, useState, useEffect } from "react";
-import { userRequest } from "../../requestMethods";
+import { axios } from "../../requestMethods";
 
 export default function Home() {
   const [userStats, setUserStats] = useState([]);
@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     const getStats = async () => {
       try {
-        const res = await userRequest.get("/users/stats");
+        const res = await axios.get("/users/stats");
         res.data.map((item) =>
           setUserStats((prev) => [
             ...prev,
@@ -43,7 +43,6 @@ export default function Home() {
     };
     getStats();
   }, [MONTHS]);
-
 
   return (
     <div className="home">

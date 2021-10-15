@@ -151,23 +151,17 @@ const Cart = () => {
   };
 
   const handleQuantity = (type, productId, title, img, price) => {
+    let productInfo = {
+      productId: productId,
+      title: title,
+      img: img,
+      price: price,
+    };
     if (type === "dec") {
-      const productInfo = {
-        productId: productId,
-        title: title,
-        img: img,
-        quantity: -1,
-        price: price,
-      };
+      productInfo.quantity = -1;
       addCart(id, productInfo, dispatch);
-    } else if (type === "inc") {
-      const productInfo = {
-        productId: productId,
-        title: title,
-        img: img,
-        quantity: 1,
-        price: price,
-      };
+    } else {
+      productInfo.quantity = 1;
       addCart(id, productInfo, dispatch);
     }
   };
@@ -239,7 +233,6 @@ const Cart = () => {
                           product.productId,
                           product.title,
                           product.img,
-                          product.quantity,
                           product.price
                         )
                       }

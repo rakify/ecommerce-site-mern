@@ -29,13 +29,12 @@ import {
   addProductSuccess,
   addProductFailure,
 } from "./productRedux";
-import { publicRequest, userRequest } from "../requestMethods";
-
+import { axios, axios } from "../requestMethods";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
-    const res = await publicRequest.post("/auth/login", user);
+    const res = await axios.post("/auth/login", user);
     dispatch(loginSuccess(res.data));
   } catch (err) {
     dispatch(loginFailure());
@@ -45,7 +44,7 @@ export const login = async (dispatch, user) => {
 export const getUsers = async (dispatch) => {
   dispatch(getUserStart());
   try {
-    const res = await userRequest.get("/users");
+    const res = await axios.get("/users");
     dispatch(getUserSuccess(res.data));
   } catch (err) {
     dispatch(getUserFailure());
@@ -55,7 +54,7 @@ export const getUsers = async (dispatch) => {
 export const deleteUser = async (id, dispatch) => {
   dispatch(deleteUserStart());
   try {
-    await userRequest.delete(`/users/${id}`);
+    await axios.delete(`/users/${id}`);
     dispatch(deleteUserSuccess({ id: id }));
   } catch (err) {
     dispatch(deleteUserFailure());
@@ -66,7 +65,7 @@ export const updateUser = async (id, user, dispatch) => {
   dispatch(updateUserStart());
   try {
     // update
-    await userRequest.put(`/users/${id}`, user);
+    await axios.put(`/users/${id}`, user);
     dispatch(updateUserSuccess({ id, user }));
   } catch (err) {
     dispatch(updateUserFailure());
@@ -76,7 +75,7 @@ export const updateUser = async (id, user, dispatch) => {
 export const addUser = async (user, dispatch) => {
   dispatch(addUserStart());
   try {
-    const res = await publicRequest.post(`/auth/register`, user);
+    const res = await axios.post(`/auth/register`, user);
     dispatch(addUserSuccess(res.data));
   } catch (err) {
     dispatch(addUserFailure());
@@ -86,7 +85,7 @@ export const addUser = async (user, dispatch) => {
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());
   try {
-    const res = await publicRequest.get("/products");
+    const res = await axios.get("/products");
     dispatch(getProductSuccess(res.data));
   } catch (err) {
     dispatch(getProductFailure());
@@ -96,7 +95,7 @@ export const getProducts = async (dispatch) => {
 export const deleteProduct = async (id, dispatch) => {
   dispatch(deleteProductStart());
   try {
-    await userRequest.delete(`/products/${id}`);
+    await axios.delete(`/products/${id}`);
     dispatch(deleteProductSuccess({ id: id }));
   } catch (err) {
     dispatch(deleteProductFailure());
@@ -107,7 +106,7 @@ export const updateProduct = async (id, product, dispatch) => {
   dispatch(updateProductStart());
   try {
     // update
-    await userRequest.put(`/products/${id}`, product);
+    await axios.put(`/products/${id}`, product);
     dispatch(updateProductSuccess({ id, product }));
   } catch (err) {
     dispatch(updateProductFailure());
@@ -117,7 +116,7 @@ export const updateProduct = async (id, product, dispatch) => {
 export const addProduct = async (product, dispatch) => {
   dispatch(addProductStart());
   try {
-    const res = await userRequest.post(`/products`, product);
+    const res = await axios.post(`/products`, product);
     dispatch(addProductSuccess(res.data));
   } catch (err) {
     dispatch(addProductFailure());

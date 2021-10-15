@@ -1,7 +1,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 import { useState } from "react";
 import styled from "styled-components";
-import { sliderItems } from "../data";
 import { mobile } from "../responsive";
 
 const Container = styled.div`
@@ -80,6 +79,29 @@ const Button = styled.button`
 `;
 
 const Slider = () => {
+  const sliderItems = [
+    {
+      id: 1,
+      img: "https://i.postimg.cc/zBtnz2PQ/basket-4567981-1920.png",
+      title: "Summer Sale",
+      desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+      bg: "#f5fafd",
+    },
+    {
+      id: 2,
+      img: "https://i.postimg.cc/QddKtJcG/wiper-2055246-1280.png",
+      title: "Household Items",
+      desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+      bg: "#fcf1ed",
+    },
+    {
+      id: 3,
+      img: "https://i.postimg.cc/NFP8GCLM/children-817368-1920.jpg",
+      title: "Kids LOVE",
+      desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+      bg: "#f4f4f4",
+    },
+  ];
   const [slideIndex, setSlideIndex] = useState(0);
 
   const handleClick = (direction) => {

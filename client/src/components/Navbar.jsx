@@ -4,6 +4,7 @@ import { Badge } from "@material-ui/core";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const Container = styled.div`
   height: 60px;
@@ -88,6 +89,12 @@ const Navbar = () => {
   const user = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.cart.products.length);
 
+  const logOut = async () => {
+    await axios.get("/auth/logout");
+    window.localStorage.clear();
+    window.location = "/login";
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -111,14 +118,7 @@ const Navbar = () => {
           {user && (
             <MenuItem>
               {user.username} <Image src={user.img} />
-              <Logout
-                onClick={() => {
-                  window.localStorage.clear();
-                  window.location = "/login";
-                }}
-              >
-                (Logout)
-              </Logout>
+              <Logout onClick={logOut}>(Logout)</Logout>
             </MenuItem>
           )}
           {!user && (

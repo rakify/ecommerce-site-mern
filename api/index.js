@@ -24,7 +24,20 @@ mongoose
 
 //middlewares
 //we should use them before routes
-app.use(cors());
+const whitelist = ["http://localhost:5000", "http://localhost:3000"];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 
 //routes

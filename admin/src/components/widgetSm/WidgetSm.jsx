@@ -1,7 +1,7 @@
 import "./widgetSm.css";
 import { Visibility } from "@material-ui/icons";
 import { useState, useEffect } from "react";
-import { userRequest } from "../../requestMethods";
+import { axios } from "../../requestMethods";
 
 export default function WidgetSm() {
   const [users, setUsers] = useState([]);
@@ -9,7 +9,7 @@ export default function WidgetSm() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const res = await userRequest.get("users/?new=true");
+        const res = await axios.get("users/?new=true");
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -34,7 +34,7 @@ export default function WidgetSm() {
             />
             <div className="widgetSmUser">
               <span className="widgetSmUsername">{user.username}</span>
-              </div>
+            </div>
             <button className="widgetSmButton">
               <Visibility className="widgetSmIcon" />
               Display

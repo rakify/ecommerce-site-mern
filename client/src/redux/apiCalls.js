@@ -15,13 +15,14 @@ import {
   deleteCartSuccess,
   deleteCartFailure,
 } from "./cartRedux";
-
-import { publicRequest, userRequest } from "../requestMethods";
+import axios from "axios";
+axios.defaults.withCredentials = true; //so its can set automatically the cookie i want
+axios.defaults.baseURL = "http://localhost:4000/api";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
-    const res = await publicRequest.post("/auth/login", user);
+    const res = await axios.post("/auth/login", user);
     dispatch(loginSuccess(res.data));
   } catch (err) {
     dispatch(loginFailure());
@@ -31,7 +32,7 @@ export const login = async (dispatch, user) => {
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());
   try {
-    const res = await publicRequest.get("/products");
+    const res = await axios.get("/products");
     dispatch(getProductSuccess(res.data));
   } catch (err) {
     dispatch(getProductFailure());
@@ -41,7 +42,7 @@ export const getProducts = async (dispatch) => {
 export const getCartProducts = async (id, dispatch) => {
   dispatch(getCartStart());
   try {
-    const res = await publicRequest.get(`/carts/find/${id}`);
+    const res = await axios.get(`/carts/find/${id}`);
     dispatch(getCartSuccess(res.data));
   } catch (err) {
     dispatch(getCartFailure());
@@ -51,7 +52,7 @@ export const getCartProducts = async (id, dispatch) => {
 export const addCart = async (id, product, dispatch) => {
   dispatch(addCartStart());
   try {
-    const res = await userRequest.post(`/carts/${id}`, product);
+    const res = await axios.post(`/carts/${id}`, product);
     dispatch(addCartSuccess(res.data));
   } catch (err) {
     dispatch(addCartFailure());
@@ -61,7 +62,7 @@ export const addCart = async (id, product, dispatch) => {
 export const deleteCart = async (id, dispatch) => {
   dispatch(deleteCartStart());
   try {
-    const res = await userRequest.delete(`/carts/${id}`);
+    const res = await axios.delete(`/carts/${id}`);
     dispatch(deleteCartSuccess(res.data));
   } catch (err) {
     dispatch(deleteCartFailure());

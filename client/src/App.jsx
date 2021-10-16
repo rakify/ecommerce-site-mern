@@ -4,6 +4,10 @@ import Product from "./pages/Product";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import Profile from "./pages/Profile";
+import Navbar from './components/Navbar';
+import Announcement from "./components/Announcement";
+import Footer from "./components/Footer";
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,24 +20,20 @@ const App = () => {
   const user = useSelector((state) => state.user.currentUser);
   return (
     <Router>
+      <Navbar />
+      <Announcement />
       <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/products/:category">
-          <ProductList />
-        </Route>
-        <Route path="/product/:id">
-          <Product />
-        </Route>
-        <Route path="/cart">
-          <Cart />
-        </Route>
+        <Route exact path="/" component={Home} />
+        <Route path="/products/:category" component={ProductList} />
+        <Route path="/product/:id" component={Product} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/profile">{!user ? <Redirect to="/" /> : <Profile />}</Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}
         </Route>
       </Switch>
+      <Footer />
     </Router>
   );
 };

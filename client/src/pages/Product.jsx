@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import Footer from "./../components/Footer";
 import Newsletter from "./../components/Newsletter";
-import Announcement from "./../components/Announcement";
-import Navbar from "./../components/Navbar";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "./../responsive";
 import { useLocation } from "react-router-dom";
@@ -141,8 +138,6 @@ const Product = () => {
 
   return (
     <Container>
-      <Navbar />
-      <Announcement />
       <Wrapper>
         <ImgContainer>
           <Image src={product.img} />
@@ -180,7 +175,6 @@ const Product = () => {
         </InfoContainer>
       </Wrapper>
       <Newsletter />
-      <Footer />
     </Container>
   );
 };

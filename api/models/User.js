@@ -13,9 +13,7 @@ const UserSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      minlength: 3,
-      maxlength: 50,
-      default: ""
+      default: "",
     },
     email: {
       type: String,
@@ -41,7 +39,7 @@ const UserSchema = new mongoose.Schema(
     address: {
       type: String,
       maxlength: 100,
-      default: ""
+      default: "",
     },
     relationship: {
       type: String,

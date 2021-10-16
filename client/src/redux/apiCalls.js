@@ -1,4 +1,11 @@
-import { loginFailure, loginStart, loginSuccess } from "./userRedux";
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "./userRedux";
 import {
   getProductStart,
   getProductSuccess,
@@ -16,8 +23,18 @@ import {
   deleteCartFailure,
 } from "./cartRedux";
 import axios from "axios";
+
 axios.defaults.withCredentials = true; //so its can set automatically the cookie i want
 axios.defaults.baseURL = "http://localhost:4000/api";
+
+export const addUser = async (user) => {
+  try {
+    const res = await axios.post(`/auth/register`, user);
+    console.log(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
@@ -26,6 +43,16 @@ export const login = async (dispatch, user) => {
     dispatch(loginSuccess(res.data));
   } catch (err) {
     dispatch(loginFailure());
+  }
+};
+
+export const updateUser = async (id, user, dispatch) => {
+  dispatch(updateUserStart());
+  try {
+    const res = await axios.put(`/users/${id}`, user);
+    dispatch(updateUserSuccess(res.data));
+  } catch (err) {
+    dispatch(updateUserFailure());
   }
 };
 

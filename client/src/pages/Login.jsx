@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./../redux/apiCalls";
@@ -71,7 +70,6 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
       <Container>
         <Wrapper>
           <Title>LOGIN</Title>

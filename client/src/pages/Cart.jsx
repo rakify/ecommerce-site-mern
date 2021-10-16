@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import Navbar from "./../components/Navbar";
-import Announcement from "./../components/Announcement";
-import Footer from "./../components/Footer";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "./../responsive";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,8 +165,6 @@ const Cart = () => {
 
   return (
     <Container>
-      <Navbar />
-      <Announcement />
       <Wrapper>
         <Title>Your Cart</Title>
         <Top>
@@ -214,7 +209,7 @@ const Cart = () => {
 
                 <PriceDetail>
                   <ProductAmmountContainer>
-                    <Remove
+                    <Remove style={{cursor: "pointer"}}
                       onClick={() =>
                         handleQuantity(
                           "dec",
@@ -226,7 +221,7 @@ const Cart = () => {
                       }
                     />
                     <ProductAmmount>{product.quantity}</ProductAmmount>
-                    <Add
+                    <Add style={{cursor: "pointer"}}
                       onClick={() =>
                         handleQuantity(
                           "inc",
@@ -273,7 +268,6 @@ const Cart = () => {
           </Summary>
         </Bottom>
       </Wrapper>
-      <Footer />
     </Container>
   );
 };

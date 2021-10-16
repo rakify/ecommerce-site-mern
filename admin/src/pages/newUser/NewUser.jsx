@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
+} from "@firebase/storage";
 import app from "../../firebase";
 import { addUser } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";

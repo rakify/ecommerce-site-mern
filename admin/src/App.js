@@ -10,20 +10,19 @@ import NewUser from "./pages/newUser/NewUser";
 import ProductList from "./pages/productList/ProductList";
 import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
+import { useSelector } from "react-redux";
 
 function App() {
-  const TOKEN = localStorage.length>=1?JSON.parse(
-    JSON.parse(localStorage?.getItem("persist:root"))?.user
-  )?.currentUser?.isAdmin:0;
-  
+  const user = useSelector((state) => state.user.currentUser);
+
   return (
     <Router>
       <Route exact path="/login">
-        {TOKEN ? <Redirect to="/" /> : <Login />}
+        {user ? <Redirect to="/" /> : <Login />}
       </Route>
-      {TOKEN ? <Topbar /> : <Redirect to="/login" />}
+      {user ? <Topbar /> : <Redirect to="/login" />}
       <div className="container">
-        {TOKEN && <Sidebar />}
+        {user && <Sidebar />}
         <Route exact path="/" component={Home} />
         <Route path="/users" component={UserList} />
         <Route path="/user/:userId" component={User} />

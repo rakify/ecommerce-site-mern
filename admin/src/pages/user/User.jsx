@@ -13,7 +13,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
+} from "@firebase/storage";
 import app from "../../firebase";
 import { useSelector } from "react-redux";
 import { useState } from "react";

@@ -1,7 +1,7 @@
 import "./widgetSm.css";
 import { Visibility } from "@material-ui/icons";
 import { useState, useEffect } from "react";
-import { axios } from "../../requestMethods";
+import axios from "axios";
 
 export default function WidgetSm() {
   const [users, setUsers] = useState([]);

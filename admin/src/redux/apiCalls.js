@@ -29,7 +29,11 @@ import {
   addProductSuccess,
   addProductFailure,
 } from "./productRedux";
-import { axios, axios } from "../requestMethods";
+import axios from "axios";
+
+axios.defaults.withCredentials = true; //so its can set automatically the cookie i want
+axios.defaults.baseURL = "http://localhost:4000/api";
+
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());

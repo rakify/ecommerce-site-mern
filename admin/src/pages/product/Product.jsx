@@ -4,14 +4,14 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
+} from "@firebase/storage";
 import { Link, useLocation } from "react-router-dom";
 import app from "../../firebase";
 import Chart from "../../components/chart/Chart";
 import { Publish } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
-import { axios } from "../../requestMethods";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { updateProduct } from "../../redux/apiCalls";
 

@@ -64,8 +64,8 @@ const Right = styled.div`
 `;
 
 const MenuItem = styled.div`
-  font-size: 14px;
-  cursor: pointer;
+  font-weight: 300;
+  font-size: 18px;
   margin-left: 25px;
   display: flex;
   align-items: center;
@@ -117,7 +117,13 @@ const Navbar = () => {
         <Right>
           {user && (
             <MenuItem>
-              {user.username} <Image src={user.img} />
+              <Link
+                style={{ textDecoration: "none", marginRight: "10px" }}
+                to="/profile"
+              >
+                {user.username}
+              </Link>
+              <Image src={user.img} />
               <Logout onClick={logOut}>(Logout)</Logout>
             </MenuItem>
           )}

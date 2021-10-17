@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   getStorage,
   ref,
@@ -8,77 +10,93 @@ import {
   getDownloadURL,
 } from "@firebase/storage";
 import app from "../firebase";
-import { addUser } from "../redux/apiCalls";
+import { login } from "./../redux/apiCalls";
+import axios from "axios";
+import {
+  PersonOutlineTwoTone,
+  VpnKeyTwoTone,
+  EmailTwoTone,
+  ImageTwoTone,
+} from "@material-ui/icons";
 
 const Container = styled.div`
-  background: white;
+  width: 100vw;
+  height: 100vh;
+  background: darkcyan;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const Wrapper = styled.div`
+  width: 35%;
   padding: 20px;
+  background: white;
   ${mobile({ width: "75%" })}
 `;
-
-const NewUser = styled.div`
-  flex: 4;
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
 `;
-
-const NewUserForm = styled.form`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const NewUserItem = styled.div`
-  width: 400px;
+const Form = styled.form`
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
-  margin-right: 20px;
 `;
 
-const NewUserItemLabel = styled.label`
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: rgb(151, 150, 150);
-`;
-
-const NewUserInput = styled.input`
-  height: 20px;
-  padding: 10px;
-  border: 1px solid gray;
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #374669;
   border-radius: 5px;
+  align-items: center;
+  overflow: hidden;
+  margin: 10px 0 10px 0;
 `;
-
-const NewUserGender = styled.div`
-  margin-top: 15px;
-  margin: 10px;
-  font-size: 18px;
-  color: #555;
-  margin: 10px;
-  font-size: 18px;
-  color: #555;
-`;
-const NewUserSelect = styled.select`
-  height: 40px;
-  border-radius: 5px;
-`;
-
-const NewUserButton = styled.button`
-  width: 200px;
+const Input = styled.input`
+  flex: 1;
+  margin: 10px 0;
+  padding: 5px;
   border: none;
-  background-color: darkblue;
+  outline: none;
+`;
+const Button = styled.button`
+  width: 40%;
+  border: none;
+  padding: 10px 15px;
+  background: darkcyan;
   color: white;
-  padding: 7px 10px;
-  font-weight: 600;
-  border-radius: 10px;
-  margin-top: 30px;
   cursor: pointer;
+  margin-bottom: 10px;
+  &:disabled {
+    color: green;
+    cursor: not-allowed;
+  }
+`;
+
+const Error = styled.span`
+  animation: blinker 3s linear infinite;
+  animation-timing-function: ease-in-out;
+  color: red;
+  margin-bottom: 10px;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+`;
+
+const Hr = styled.hr`
+  background: #eee;
+  border: none;
+  height: 1px;
+  width: 50%;
 `;
 
 export default function Register() {
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -86,7 +104,23 @@ export default function Register() {
     });
   };
 
-  const handleClick = (e) => {
+  const addUser = async (user) => {
+    try {
+      await axios.post(`/auth/register`, user);
+      login(dispatch, { username: user.username, password: user.password });
+    } catch (err) {
+      setError(true);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const user = {
+      ...inputs,
+    };
+    addUser(user);
+  };
+  const handleSubmitWithFile = (e) => {
     e.preventDefault();
     const fileName = new Date().getTime() + file.name;
     const storage = getStorage(app);
@@ -115,9 +149,7 @@ export default function Register() {
           default:
         }
       },
-      (error) => {
-        // Handle unsuccessful uploads
-      },
+      (error) => {},
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
@@ -134,61 +166,86 @@ export default function Register() {
 
   return (
     <Container>
-        <NewUser>
-          <h1>New User</h1>
-          <NewUserForm>
-            <NewUserItem>
-              <NewUserItemLabel>Image</NewUserItemLabel>
-              <NewUserInput
-                type="file"
-                id="file"
-                onChange={(e) => setFile(e.target.files[0])}
-                required
-              />
-            </NewUserItem>
-            <NewUserItem>
-              <NewUserItemLabel>Username</NewUserItemLabel>
-              <NewUserInput
-                type="text"
-                name="username"
-                placeholder="Username"
-                onChange={handleChange}
-                required
-              />
-            </NewUserItem>
-            <NewUserItem>
-              <NewUserItemLabel>Email</NewUserItemLabel>
-              <NewUserInput
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleChange}
-                required
-              />
-            </NewUserItem>
-            <NewUserItem>
-              <NewUserItemLabel>Password</NewUserItemLabel>
-              <NewUserInput
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleChange}
-                required
-              />
-            </NewUserItem>
-            <NewUserButton
-              onClick={
-                file &&
-                inputs.email &&
-                inputs.username &&
-                inputs.password &&
-                handleClick
-              }
-            >
-              Register
-            </NewUserButton>
-          </NewUserForm>
-        </NewUser>
+      <Wrapper>
+        <Title>Create a New Account</Title>
+        <Form
+          onSubmit={(e) => (file ? handleSubmitWithFile(e) : handleSubmit(e))}
+        >
+          <InputContainer>
+            <PersonOutlineTwoTone />
+            <Input
+              type="text"
+              name="username"
+              placeholder="Username"
+              onChange={handleChange}
+              minLength="3"
+              maxLength="30"
+              required
+            />
+          </InputContainer>
+          <InputContainer>
+            <EmailTwoTone />
+            <Input
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              required
+            />
+          </InputContainer>
+          <InputContainer>
+            <VpnKeyTwoTone />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              minLength="4"
+              required
+            />
+          </InputContainer>
+          <InputContainer>
+            <ImageTwoTone />
+            <Input
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </InputContainer>
+
+          {error && <Error>Email or Username already exists</Error>}
+
+          <Button>Register</Button>
+        </Form>
+
+        <Link
+          to="/forgot-password"
+          style={{
+            margin: "5px 0",
+            width: "50%",
+            fontSize: "12px",
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
+        >
+          FORGOT PASSWORD?
+        </Link>
+        <Hr />
+        <Link
+          to="/register"
+          style={{
+            margin: "5px 0",
+            width: "50%",
+            fontSize: "12px",
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
+        >
+          LOGIN HERE
+        </Link>
+        <Hr />
+      </Wrapper>
     </Container>
   );
 }

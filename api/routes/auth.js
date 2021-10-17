@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const cryptojs = require("crypto-js");
+const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
 //REGISTER
 router.post("/register", async (req, res) => {
-  req.body.password = cryptojs.AES.encrypt(
+  req.body.password = CryptoJS.AES.encrypt(
     req.body.password,
     process.env.pass_secret
   ).toString();
@@ -16,6 +16,7 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -24,13 +25,12 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    !user && res.status(401).json("Wrong credentials!");
-    const validPassword = cryptojs.AES.decrypt(
+    !user && res.status(401).json("User not found!");
+
+    const validPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.pass_secret
-    ).toString(cryptojs.enc.Utf8);
-    console.log(validPassword);
-
+    ).toString(CryptoJS.enc.Utf8);
     validPassword !== req.body.password &&
       res.status(401).json("Wrong credentials!");
 
@@ -50,6 +50,7 @@ router.post("/login", async (req, res) => {
       .cookie("jwt", accessToken, {
         httpOnly: true,
         expires: new Date(Date.now() + 1 * 3600000),
+        sameSite: "strict",
       })
       .json({ ...others });
   } catch (err) {

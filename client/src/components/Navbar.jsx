@@ -130,10 +130,10 @@ const Navbar = () => {
           {!user && (
             <>
               <MenuItem>
-                <Link to="/register">Register</Link>
+                <Link to="/register" style={{ textDecoration: "none" }}>Register</Link>
               </MenuItem>
               <MenuItem>
-                <Link to="/login">Login</Link>
+                <Link to="/login" style={{ textDecoration: "none" }}>Login</Link>
               </MenuItem>
             </>
           )}

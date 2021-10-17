@@ -138,6 +138,13 @@ const SummaryButton = styled.button`
   font-weight: 600;
 `;
 
+const Empty = styled.h1`
+ font-family: 'Brush Script MT', cursive;
+ text-align: center;
+ padding: 50px;
+ font-weight: 300;
+`
+
 const Cart = () => {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.currentUser?._id);
@@ -167,7 +174,8 @@ const Cart = () => {
     <Container>
       <Wrapper>
         <Title>Your Cart</Title>
-        <Top>
+      { cart.products.length===0 && <Empty>YOUR CART IS CURRENTLY EMPTY!</Empty>}  
+      { cart.products.length>0 && <> <Top>
           <Link to="/">
             <TopButton>Continue Shopping</TopButton>
           </Link>
@@ -266,7 +274,7 @@ const Cart = () => {
             </SummaryItem>
             <SummaryButton>CHECKOUT NOW</SummaryButton>
           </Summary>
-        </Bottom>
+        </Bottom></>}
       </Wrapper>
     </Container>
   );

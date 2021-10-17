@@ -4,28 +4,28 @@ const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      unique: true,
+      unique: [true, "Username already exists"],
       trim: true,
-      minlength: 3,
-      maxlength: 20,
-      required: true,
+      minlength: [3, "Username must be more than 3 characters"],
+      maxlength: [30,"Username must be less than 30 characters"],
+      required: [true, "Username is required"],
     },
     name: {
       type: String,
       trim: true,
+      maxlength: [100, "Name must be less than 100 characters"],
       default: "",
     },
     email: {
       type: String,
       trim: true,
-      required: true,
-      unique: true,
+      required: [true, "Email is required"],
+      unique: [true, "Email already exists"],
     },
     password: {
       type: String,
-      minlength: 5,
-      maxlength: 100,
-      required: true,
+      minlength: [4, "Password must be more than 4 characters"],
+      required: [true, "Password is required"],
     },
     isAdmin: {
       type: Boolean,
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      maxlength: 100,
+      maxlength: 300,
       default: "",
     },
     relationship: {

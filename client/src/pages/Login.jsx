@@ -3,6 +3,13 @@ import { mobile } from "../responsive";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./../redux/apiCalls";
+import { Link } from "react-router-dom";
+import {
+  VisibilityTwoTone,
+  VisibilityOffTwoTone,
+  VpnKeyTwoTone,
+  PersonOutlineTwoTone,
+} from "@material-ui/icons";
 
 const Container = styled.div`
   width: 100vw;
@@ -13,7 +20,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 const Wrapper = styled.div`
-  width: 25%;
+  width: 35%;
   padding: 20px;
   background: white;
   ${mobile({ width: "75%" })}
@@ -26,11 +33,22 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #374669;
+  border-radius: 5px;
+  align-items: center;
+  overflow: hidden;
+  margin: 10px 0 10px 0;
+`;
 const Input = styled.input`
   flex: 1;
-  min-width: 40%;
   margin: 10px 0;
-  padding: 10px;
+  padding: 5px;
+  border: none;
+  outline: none;
 `;
 const Button = styled.button`
   width: 40%;
@@ -46,15 +64,23 @@ const Button = styled.button`
   }
 `;
 
-const Link = styled.a`
-  margin: 5px 0;
-  font-size: 12px;
-  text-decoration: underline;
-  cursor: pointer;
+const Error = styled.span`
+  animation: blinker 3s linear infinite;
+  animation-timing-function: ease-in-out;
+  color: red;
+  margin-bottom: 10px;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
 `;
 
-const Error = styled.span`
-  color: red;
+const Hr = styled.hr`
+  background: #eee;
+  border: none;
+  height: 1px;
+  width: 50%;
 `;
 
 const Login = () => {
@@ -63,32 +89,74 @@ const Login = () => {
   const dispatch = useDispatch();
   const { isFetching, error } = useSelector((state) => state.user);
 
-  const handleClick = async (e) => {
+  const [visible, setVisible] = useState(false);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    login(dispatch, { username, password });
+    username.length >= 3 &&
+      password.length >= 4 &&
+      login(dispatch, { username, password });
   };
 
   return (
     <>
       <Container>
         <Wrapper>
-          <Title>LOGIN</Title>
-          <Form>
-            <Input
-              placeholder="username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Input
-              placeholder="password" type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button onClick={handleClick}>
-              ENTER
-            </Button>
-            {error && <Error>Something went wrong!</Error>}
-            <Link>FORGOT PASSWORD?</Link>
-            <Link>CREATE A NEW ACCOUNT</Link>
+          <Title>Please Login to Continue</Title>
+          <Form onSubmit={(e) => handleSubmit(e)}>
+            <InputContainer>
+              <PersonOutlineTwoTone />
+              <Input
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </InputContainer>
+            <InputContainer>
+              <VpnKeyTwoTone />
+              <Input
+                placeholder="Password"
+                type={visible ? "text" : "password"}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {!visible && (
+                <VisibilityOffTwoTone onClick={() => setVisible(!visible)} />
+              )}
+              {visible && (
+                <VisibilityTwoTone onClick={() => setVisible(!visible)} />
+              )}
+            </InputContainer>
+
+            {error && <Error>{error.payload}</Error>}
+
+            <Button disabled={isFetching}>ENTER</Button>
           </Form>
+
+          <Link
+              to="/forgot-password"
+              style={{
+                margin: "5px 0",
+                width:"50%",
+                fontSize: "12px",
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              FORGOT PASSWORD?
+            </Link>
+            <Hr />
+            <Link
+              to="/register"
+              style={{
+                margin: "5px 0",
+                width:"50%",
+                fontSize: "12px",
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              CREATE A NEW ACCOUNT
+            </Link>
+            <Hr />
         </Wrapper>
       </Container>
     </>

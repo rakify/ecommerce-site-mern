@@ -174,8 +174,8 @@ const Cart = () => {
     <Container>
       <Wrapper>
         <Title>Your Cart</Title>
-      { cart.products.length===0 && <Empty>YOUR CART IS CURRENTLY EMPTY!</Empty>}  
-      { cart.products.length>0 && <> <Top>
+      { cart.products.length===0 && !cart.error && <Empty>YOUR CART IS CURRENTLY EMPTY!</Empty>}  
+      { cart.products.length>0 && !cart.error && <> <Top>
           <Link to="/">
             <TopButton>Continue Shopping</TopButton>
           </Link>
@@ -186,7 +186,7 @@ const Cart = () => {
             <TopText onClick={emptyCart}>Clear Cart</TopText>
           </TopTexts>
 
-          <TopButton type="filled">Checkout Now</TopButton>
+          <Link to="/checkout"><TopButton type="filled">Checkout Now</TopButton></Link>
         </Top>
 
         <Bottom>
@@ -272,7 +272,7 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <SummaryButton>CHECKOUT NOW</SummaryButton>
+            <Link to="/checkout"><SummaryButton>CHECKOUT NOW</SummaryButton></Link>
           </Summary>
         </Bottom></>}
       </Wrapper>

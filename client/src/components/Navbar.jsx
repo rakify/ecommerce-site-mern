@@ -3,8 +3,8 @@ import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import { Badge } from "@material-ui/core";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/apiCalls";
 
 const Container = styled.div`
   height: 60px;
@@ -88,12 +88,7 @@ const Logout = styled.span`
 const Navbar = () => {
   const user = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.cart.products.length);
-
-  const logOut = async () => {
-    await axios.get("/auth/logout");
-    window.localStorage.clear();
-    window.location = "/login";
-  };
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -124,16 +119,20 @@ const Navbar = () => {
                 {user.username}
               </Link>
               <Image src={user.img} />
-              <Logout onClick={logOut}>(Logout)</Logout>
+              <Logout onClick={() => logout(dispatch)}>(Logout)</Logout>
             </MenuItem>
           )}
           {!user && (
             <>
               <MenuItem>
-                <Link to="/register" style={{ textDecoration: "none" }}>Register</Link>
+                <Link to="/register" style={{ textDecoration: "none" }}>
+                  Register
+                </Link>
               </MenuItem>
               <MenuItem>
-                <Link to="/login" style={{ textDecoration: "none" }}>Login</Link>
+                <Link to="/login" style={{ textDecoration: "none" }}>
+                  Login
+                </Link>
               </MenuItem>
             </>
           )}

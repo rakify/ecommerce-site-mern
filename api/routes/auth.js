@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.jwt_secret,
-      { expiresIn: "3d" }
+      { expiresIn: "30d" }
     );
 
     const { password, ...others } = user._doc;
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
       .status(200)
       .cookie("jwt", accessToken, {
         httpOnly: true,
-        expires: new Date(Date.now() + 1 * 3600000),
+        expires: new Date(Date.now() + 2592000000), //2592000000 miliseconds = 30 days
         sameSite: "strict",
       })
       .json({ ...others });

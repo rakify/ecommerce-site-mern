@@ -5,9 +5,10 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 import Announcement from "./components/Announcement";
 import Footer from "./components/Footer";
+import Checkout from "./pages/Checkout";
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,7 +28,12 @@ const App = () => {
         <Route path="/products/:category" component={ProductList} />
         <Route path="/product/:id" component={Product} />
         <Route path="/cart" component={Cart} />
-        <Route path="/profile">{!user ? <Redirect to="/" /> : <Profile />}</Route>
+        <Route path="/checkout">
+          {!user ? <Redirect to="/" /> : <Checkout />}
+        </Route>
+        <Route path="/profile">
+          {!user ? <Redirect to="/" /> : <Profile />}
+        </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}

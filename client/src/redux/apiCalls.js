@@ -27,6 +27,14 @@ import axios from "axios";
 axios.defaults.withCredentials = true; //so its can set automatically the cookie i want
 axios.defaults.baseURL = "http://localhost:4000/api";
 
+
+export const logout = async () => {
+  await axios.get("/auth/logout");
+  window.localStorage.clear();
+  window.location = "/login";
+};
+
+
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
@@ -86,3 +94,12 @@ export const deleteCart = async (id, dispatch) => {
     dispatch(deleteCartFailure());
   }
 };
+
+export const addOrder = async(order) =>{
+  try{
+    const res = await axios.post("/orders", (order));
+    console.log(res.data);
+  }catch(err){
+    console.log(err);
+  }
+}

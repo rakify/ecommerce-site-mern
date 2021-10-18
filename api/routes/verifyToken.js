@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
   //parsing cookies from header {credit: https://alligator.io/nodejs/express-cookies/}
-  const rawCookies = req.headers.cookie.split("; ");
+  const rawCookies = req.headers?.cookie.split("; ");
   const parsedCookies = {};
   rawCookies.forEach((rawCookie) => {
     const parsedCookie = rawCookie.split("=");
